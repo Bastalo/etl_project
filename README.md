@@ -23,7 +23,7 @@ project_root/
 │
 ├── conf/
 │   └── config.yaml
-└── main.py  # скрипт
+└── script.py  # скрипт проекта
 ```
 
 **Пример содержания `conf/config.yaml`:**
@@ -44,6 +44,14 @@ logging:
 telegram:
   token: "123456789:ABCDEF..."
   chat_id: "987654321"
+```
+
+## Установка
+
+Установите все необходимые зависимости одной командой:
+
+```bash
+pip install requests beautifulsoup4 polars pendulum sqlalchemy psycopg2-binary hydra-core tenacity tqdm
 ```
 
 ## Создание базы данных
@@ -80,19 +88,11 @@ with db.connect() as con:
 df.write_database('etl.hh_search', db, if_table_exists='append')
 ```
 
-## Установка
-
-Установите все необходимые зависимости одной командой:
-
-```bash
-pip install requests beautifulsoup4 polars pendulum sqlalchemy psycopg2-binary hydra-core tenacity tqdm
-```
-
 ## Запуск и автоматизация
 
 ### Ручной запуск
 ```bash
-python main.py
+python script.py
 ```
 
 ### Настройка в Windows Task Scheduler
