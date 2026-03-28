@@ -46,6 +46,40 @@ telegram:
   chat_id: "987654321"
 ```
 
+## Создание базы данных
+Инициализируем таблицу в базе данных (разово):
+
+```python
+from sqlalchemy import create_engine, text
+
+DATABASE_URL = 'postgresql+psycopg2://etl:password@localhost:5432/your_db'
+db = create_engine(DATABASE_URL)
+
+with db.connect() as con:
+    # Удаление таблицы, если нужно пересоздать
+    # con.execute(text("DROP TABLE IF EXISTS etl.hh_search"))
+    con.execute(text("""
+        CREATE TABLE IF NOT EXISTS etl.hh_search (
+            created_dttm TIMESTAMPTZ NOT NULL DEFAULT NOW(),  
+            request_dttm TIMESTAMPTZ NOT NULL,
+            vacancy_id INT NOT NULL,
+            vacancy_title TEXT NOT NULL,
+            company_id TEXT,
+            company_title TEXT NOT NULL,
+            company_visible_name TEXT NOT NULL,
+            publication_time TIMESTAMPTZ NOT NULL,
+            last_change_time TIMESTAMPTZ NOT NULL,
+            creation_time TIMESTAMPTZ NOT NULL,
+            is_adv BOOL NOT NULL,
+            snippet JSONB NOT NULL,
+            responses_count INT NOT NULL,
+            total_responses_count INT NOT NULL
+        )
+    """))
+    con.commit()
+df.write_database('etl.hh_search', db, if_table_exists='append')
+```
+
 ## Установка
 
 Установите все необходимые зависимости одной командой:
